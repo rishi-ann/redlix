@@ -1,11 +1,45 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight, Mail, Loader2, Check } from "lucide-react";
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const [email, setEmail] = useState("");
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+    const [message, setMessage] = useState("");
+
+    const handleSubscribe = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email) return;
+
+        setStatus("loading");
+        setMessage("");
+
+        try {
+            const response = await fetch("/api/newsletter", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setStatus("success");
+                setMessage("Subscribed successfully!");
+                setEmail("");
+                setTimeout(() => setStatus("idle"), 3000);
+            } else {
+                setStatus("error");
+                setMessage(data.message || "Something went wrong.");
+            }
+        } catch (error) {
+            setStatus("error");
+            setMessage("Failed to subscribe. Please try again.");
+        }
+    };
 
     return (
         <footer className="relative bg-[#F8F9FB] pt-16 sm:pt-20 md:pt-24 pb-8 sm:pb-12 overflow-hidden border-t border-gray-100">
@@ -80,17 +114,35 @@ const Footer = () => {
                         </p>
 
                         <div className="relative max-w-md w-full">
-                            <div className="relative flex items-center bg-white border border-gray-200 rounded-full px-3 sm:px-4 py-2 hover:border-red-500 transition-colors shadow-sm shadow-black/5">
+                            <form onSubmit={handleSubscribe} className={`relative flex items-center bg-white border ${status === "error" ? "border-red-300" : "border-gray-200"} rounded-full px-3 sm:px-4 py-2 hover:border-red-500 transition-colors shadow-sm shadow-black/5`}>
                                 <span className="text-gray-400 mr-2 text-[13px] sm:text-[14px]">@</span>
                                 <input
                                     type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter your email..."
-                                    className="bg-transparent border-none outline-none text-[13px] sm:text-[14px] text-gray-900 w-full placeholder:text-gray-400"
+                                    className="bg-transparent border-none outline-none text-[13px] sm:text-[14px] text-gray-900 w-full placeholder:text-gray-400 disabled:opacity-50"
+                                    disabled={status === "loading" || status === "success"}
                                 />
-                                <button className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 bg-red-600 hover:bg-red-700 text-white rounded-full transition-all active:scale-95 shrink-0 ml-2">
-                                    <ArrowRight size={16} className="sm:w-[18px] sm:h-[18px]" />
+                                <button
+                                    type="submit"
+                                    disabled={status === "loading" || status === "success" || !email}
+                                    className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full transition-all active:scale-95 shrink-0 ml-2 ${status === "success" ? "bg-green-500 hover:bg-green-600" : "bg-red-600 hover:bg-red-700"} text-white disabled:opacity-70 disabled:cursor-not-allowed`}
+                                >
+                                    {status === "loading" ? (
+                                        <Loader2 size={16} className="animate-spin" />
+                                    ) : status === "success" ? (
+                                        <Check size={16} />
+                                    ) : (
+                                        <ArrowRight size={16} className="sm:w-[18px] sm:h-[18px]" />
+                                    )}
                                 </button>
-                            </div>
+                            </form>
+                            {message && (
+                                <p className={`mt-2 text-xs ${status === "success" ? "text-green-600" : "text-red-500"} pl-4 animate-in fade-in slide-in-from-top-1`}>
+                                    {message}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -5,37 +5,37 @@ import { motion } from "framer-motion";
 
 const testimonials = [
     {
-        quote: "A total game-changer for our agency operations.",
+        quote: "Working with Redlix was a total game-changer for our agency operations. They built us a custom client management system that streamlined our entire workflow. What used to take hours now takes minutes, and our team can focus on what really matters - delivering results for our clients.",
         author: "Dhanush Reddy",
         role: "Founder @ Dhasha Media",
         image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1770931011/Screenshot_2026-02-13_at_02.45.59_kw8pih.png"
     },
     {
-        quote: "A modern, fast, and accessible face for our state's digital initiatives.",
+        quote: "Redlix delivered a modern, fast, and accessible digital platform for our state initiatives. They understood the unique challenges of government infrastructure and created a solution that serves thousands of citizens efficiently. The attention to accessibility and performance was exceptional.",
         author: "HSGA Telangana",
         role: "Government Infrastructure",
         image: "https://res.cloudinary.com/dq2suftps/image/upload/v1722516854/logo_bivaq2.jpg"
     },
     {
-        quote: "Our sales velocity doubled since launch.",
+        quote: "Our sales velocity doubled since launch. The website Redlix built for us doesn't just look good - it converts. The clean design, fast loading times, and intuitive user experience have transformed how customers interact with our brand. Best investment we've made.",
         author: "Jaswanth Sonti",
         role: "Founder @ Forge Digital Technologies",
         image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771184951/Screenshot_2026-02-16_at_01.18.59_yodn7t.png"
     },
     {
-        quote: "Precision engineering for modern governance.",
+        quote: "The precision engineering and attention to detail in our digital platform is remarkable. Redlix built a system that handles complex student management, event coordination, and communication seamlessly. It's exactly what modern governance needs - efficient, reliable, and user-friendly.",
         author: "HSGA CMRIT",
         role: "HSGA Chapter",
         image: "https://res.cloudinary.com/dq2suftps/image/upload/v1722516854/logo_bivaq2.jpg"
     },
     {
-        quote: "Redlix has been an exceptional partner in our journey.",
+        quote: "Redlix has been an exceptional partner in our journey. They took time to understand our business, our challenges, and our goals. The solution they delivered exceeded our expectations in every way. Their ongoing support and commitment to our success sets them apart.",
         author: "Harshith Sai Tunguntla",
         role: "CEO @ SAS",
         image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771184658/Screenshot_2026-02-16_at_01.14.02_btxipo.png"
     },
     {
-        quote: "An incredible collaboration that delivered beyond expectations.",
+        quote: "An incredible collaboration that delivered beyond expectations. From the initial consultation to the final launch, Redlix was professional, responsive, and incredibly talented. They transformed our vision into a beautiful, functional platform that our entire community loves using.",
         author: "NSS CMRIT",
         role: "Student Chapter",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiY63DjvYa-bL8ci8s5_KTiLm_9Mw_Wy0Xdw&s"
@@ -49,7 +49,11 @@ const HighlightedText = ({ text }: { text: string }) => {
         "intuitive", "impressive", "vital", "productivity", "results",
         "high-speed", "business impact", "doubled", "Seamless communication",
         "scalable architecture", "long-term growth", "converts", "performing 3x",
-        "Professional", "talented", "flawless", "peace of mind", "exceptional", "market-ready"
+        "Professional", "talented", "flawless", "peace of mind", "exceptional", "market-ready",
+        "streamlined", "custom", "focus", "efficient", "accessible", "serves thousands",
+        "attention to detail", "clean design", "fast loading", "Best investment",
+        "reliable", "user-friendly", "exceeded our expectations", "commitment",
+        "beautiful", "functional", "responsive", "vision", "seamlessly"
     ];
 
     const parts = text.split(new RegExp(`(${keywords.join("|")})`, "gi"));

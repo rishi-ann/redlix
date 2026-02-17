@@ -49,3 +49,10 @@ model MaintenanceRequest {
   createdAt   DateTime @default(now())
 }
 
+model Newsletter {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+

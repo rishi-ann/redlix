@@ -3,147 +3,156 @@
 import React, { useState, useEffect } from "react";
 import { setCookie, getCookie } from "@/lib/cookies";
 import { trackAction } from "@/lib/analytics";
-import { Cookie, X, ChevronDown, ChevronUp, ShieldCheck, Activity } from "lucide-react";
+import { Cookie, X, Shield, BarChart3, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const CookieConsent = () => {
   const [showBanner, setShowBanner] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     // Check if user has already consented
     const consent = getCookie("redlix_cookie_consent");
     if (!consent) {
       // Add a small delay for better UX
-      const timer = setTimeout(() => setShowBanner(true), 1000);
+      const timer = setTimeout(() => setShowBanner(true), 1500);
       return () => clearTimeout(timer);
     }
   }, []);
 
-  const handleClose = (callback?: () => void) => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setShowBanner(false);
-      setIsClosing(false);
-      if (callback) callback();
-    }, 300); // Wait for animation
+  const handleClose = () => {
+    setShowBanner(false);
   };
 
   const handleAccept = () => {
     setCookie("redlix_cookie_consent", "accepted", { expires: 365 });
     setCookie("redlix_analytics_enabled", "true", { expires: 365 });
-
-    trackAction({
-      type: "cookie_consent",
-      element: "banner",
-      page: window.location.pathname,
-      timestamp: Date.now(),
-      metadata: { action: "accepted" },
-    });
-
+    trackConsent("accepted");
     handleClose();
   };
 
   const handleReject = () => {
     setCookie("redlix_cookie_consent", "rejected", { expires: 365 });
     setCookie("redlix_analytics_enabled", "false", { expires: 365 });
+    trackConsent("rejected");
+    handleClose();
+  };
 
+  const trackConsent = (action: string) => {
     trackAction({
       type: "cookie_consent",
       element: "banner",
       page: window.location.pathname,
       timestamp: Date.now(),
-      metadata: { action: "rejected" },
+      metadata: { action },
     });
-
-    handleClose();
   };
 
-  if (!showBanner) return null;
-
   return (
-    <div
-      className={cn(
-        "fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[100] max-w-[calc(100vw-2rem)] w-full md:w-[400px]",
-        "transition-all duration-500 transform",
-        isClosing ? "opacity-0 translate-y-8 scale-95" : "opacity-100 translate-y-0 scale-100"
+    <AnimatePresence>
+      {showBanner && (
+        <motion.div
+          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.95 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed bottom-6 right-6 z-[100] w-full max-w-[420px]"
+        >
+          <div className="bg-white/95 backdrop-blur-xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl p-6 overflow-hidden relative group">
+
+            {/* Subtle Gradient Background */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-red-500/5 to-transparent rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
+
+            <div className="relative z-10 flex flex-col gap-5">
+
+              {/* Header Section */}
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-red-50 text-red-600 rounded-2xl shrink-0 shadow-sm border border-red-100/50">
+                  <Cookie size={22} strokeWidth={2.5} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-[17px] font-semibold text-gray-900 tracking-tight flex items-center gap-2">
+                    Cookie Preferences
+                    <span className="text-[10px] font-medium bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full uppercase tracking-wider">Privacy</span>
+                  </h3>
+                  <p className="text-[13px] text-gray-500 leading-relaxed font-medium">
+                    We use cookies to enhance your browsing experience and analyze site traffic.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowBanner(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100 -mt-1 -mr-1"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Expandable Details */}
+              <AnimatePresence>
+                {showDetails && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="space-y-3 pt-2 pb-4">
+                      <div className="flex items-start gap-3 p-3 bg-gray-50/80 rounded-2xl border border-gray-100/50">
+                        <div className="mt-0.5 text-green-600 bg-green-100 p-1.5 rounded-lg">
+                          <Shield size={14} strokeWidth={2.5} />
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-semibold text-gray-900">Essential</p>
+                          <p className="text-[11px] text-gray-500 leading-snug">Required for core site functionality. Always active.</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-gray-50/80 rounded-2xl border border-gray-100/50">
+                        <div className="mt-0.5 text-blue-600 bg-blue-100 p-1.5 rounded-lg">
+                          <BarChart3 size={14} strokeWidth={2.5} />
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-semibold text-gray-900">Analytics</p>
+                          <p className="text-[11px] text-gray-500 leading-snug">Helps us improve our services by tracking usage.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={handleReject}
+                    className="px-4 py-3 text-[13px] font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all border border-gray-200/50 active:scale-[0.98]"
+                  >
+                    Decline All
+                  </button>
+                  <button
+                    onClick={handleAccept}
+                    className="px-4 py-3 text-[13px] font-semibold text-white bg-red-600 hover:bg-red-700 rounded-2xl shadow-lg shadow-red-600/20 transition-all hover:shadow-red-600/30 active:scale-[0.98] flex items-center justify-center gap-2 group/btn"
+                  >
+                    Accept All
+                    <ChevronRight size={14} className="opacity-70 group-hover/btn:translate-x-0.5 transition-transform" strokeWidth={3} />
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => setShowDetails(!showDetails)}
+                  className="text-[11px] font-medium text-gray-400 hover:text-gray-600 transition-colors text-center py-1 flex items-center justify-center gap-1"
+                >
+                  {showDetails ? "Hide Details" : "Manage Preferences"}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </motion.div>
       )}
-    >
-      <div className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-gray-200 dark:border-zinc-800 shadow-2xl rounded-2xl p-6 overflow-hidden relative">
-        {/* Decorative background element */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-[50px] pointer-events-none -mr-10 -mt-10"></div>
-
-        <div className="relative z-10">
-          <div className="flex items-start gap-4 mb-4">
-            <div className="p-3 bg-red-50 dark:bg-red-500/10 rounded-xl text-red-600 dark:text-red-400 shrink-0">
-              <Cookie size={24} />
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">
-                We value your privacy
-              </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                We use cookies to enhance your experience, analyze site traffic, and personalize content.
-              </p>
-            </div>
-          </div>
-
-          {/* Expandable Details Section */}
-          <div
-            className={cn(
-              "overflow-hidden transition-all duration-300 ease-in-out",
-              showDetails ? "max-h-[300px] opacity-100 mb-4" : "max-h-0 opacity-0"
-            )}
-          >
-            <div className="bg-gray-50 dark:bg-zinc-800/50 rounded-xl p-4 text-xs space-y-3 mb-2 border border-gray-100 dark:border-zinc-800">
-              <div className="flex items-start gap-2">
-                <ShieldCheck size={14} className="text-green-500 mt-0.5 shrink-0" />
-                <div>
-                  <span className="font-semibold text-gray-700 dark:text-gray-200 block">Essential</span>
-                  <span className="text-gray-500 dark:text-gray-500">Required for the site to function properly. Cannot be disabled.</span>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <Activity size={14} className="text-blue-500 mt-0.5 shrink-0" />
-                <div>
-                  <span className="font-semibold text-gray-700 dark:text-gray-200 block">Analytics</span>
-                  <span className="text-gray-500 dark:text-gray-500">Helps us understand how you use our site to improve it.</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <div className="flex gap-3">
-              <button
-                onClick={handleReject}
-                className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-xl transition-colors"
-              >
-                Decline
-              </button>
-              <button
-                onClick={handleAccept}
-                className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-lg shadow-red-600/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                Accept All
-              </button>
-            </div>
-
-            <button
-              onClick={() => setShowDetails(!showDetails)}
-              className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center justify-center gap-1 py-1"
-            >
-              {showDetails ? "Hide Details" : "Preferences & Details"}
-              {showDetails ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    </AnimatePresence>
   );
 };
-
-
 
 export default CookieConsent;

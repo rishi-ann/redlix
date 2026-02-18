@@ -14,7 +14,7 @@ const projects = [
             role: "Founder @ Dhasha Media",
             avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1770931011/Screenshot_2026-02-13_at_02.45.59_kw8pih.png"
         },
-        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771183464/Screenshot_2026-02-16_at_00.54.16_ytr8rv.png",
+        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771183399/Screenshot_2026-02-16_at_00.53.01_r094vj.png",
         studioName: "Redlix",
         link: "/dhasha-media"
     },
@@ -40,7 +40,7 @@ const projects = [
             role: "Founder @ Forge Digital Technologies",
             avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771184951/Screenshot_2026-02-16_at_01.18.59_yodn7t.png"
         },
-        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771183721/Screenshot_2026-02-16_at_00.58.35_idhgxq.png",
+        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771390101/Screenshot_2026-02-18_at_10.18.10_nnmxgf.png",
         studioName: "Redlix",
         link: "/forge-digital"
     },

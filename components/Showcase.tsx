@@ -14,7 +14,7 @@ const projects = [
             role: "Founder @ Dhasha Media",
             avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1770931011/Screenshot_2026-02-13_at_02.45.59_kw8pih.png"
         },
-        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771183399/Screenshot_2026-02-16_at_00.53.01_r094vj.png",
+        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771391113/Screenshot_2026-02-18_at_10.34.50_uwgpwm.png",
         studioName: "Redlix",
         link: "/dhasha-media"
     },

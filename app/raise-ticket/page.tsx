@@ -34,11 +34,41 @@ export default function RaiseTicketPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const pageUrl = urls.map(u => u.value.trim()).filter(Boolean).join(", ");
+        if (!pageUrl) {
+            alert("Please provide at least one valid URL or Page.");
+            return;
+        }
+
         setStatus("loading");
-        setTimeout(() => {
-            setTicketId("RLX-" + Math.random().toString(36).substring(2, 9).toUpperCase());
-            setStatus("success");
-        }, 1500);
+
+        try {
+            const res = await fetch("/api/raise-ticket", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...formData, pageUrl }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setStatus("success");
+                setTicketId(data.ticketId);
+                setFormData({
+                    name: "",
+                    clientId: "",
+                    description: "",
+                    authorizedPerson: "",
+                });
+                setUrls([{ value: "" }]);
+            } else {
+                setStatus("error");
+            }
+        } catch (error) {
+            console.error(error);
+            setStatus("error");
+        }
     };
 
     return (
@@ -139,6 +169,8 @@ export default function RaiseTicketPage() {
                                             <input
                                                 type="text"
                                                 id="name"
+                                                value={formData.name}
+                                                onChange={handleChange}
                                                 placeholder="John Doe"
                                                 className="w-full bg-transparent border-b border-zinc-200 py-2 outline-none focus:border-red-600 transition-colors text-zinc-950 placeholder:text-zinc-300"
                                                 required
@@ -149,6 +181,8 @@ export default function RaiseTicketPage() {
                                             <input
                                                 type="text"
                                                 id="clientId"
+                                                value={formData.clientId}
+                                                onChange={handleChange}
                                                 placeholder="CID-XXXX"
                                                 className="w-full bg-transparent border-b border-zinc-200 py-2 outline-none focus:border-red-600 transition-colors text-zinc-950 placeholder:text-zinc-300"
                                                 required
@@ -202,6 +236,8 @@ export default function RaiseTicketPage() {
                                         <label className="text-[13px] font-medium text-zinc-400 group-focus-within:text-red-600 transition-colors">Detailed changes needed</label>
                                         <textarea
                                             id="description"
+                                            value={formData.description}
+                                            onChange={handleChange}
                                             rows={4}
                                             placeholder="Describe the changes required..."
                                             className="w-full bg-zinc-50 border border-zinc-100 rounded-2xl p-4 outline-none focus:border-red-600/30 focus:ring-4 focus:ring-red-600/5 transition-all text-zinc-950 placeholder:text-zinc-300 resize-none"
@@ -215,6 +251,8 @@ export default function RaiseTicketPage() {
                                     <input
                                         type="text"
                                         id="authorizedPerson"
+                                        value={formData.authorizedPerson}
+                                        onChange={handleChange}
                                         placeholder="Name of authorized person"
                                         className="w-full bg-transparent border-b border-zinc-200 py-2 outline-none focus:border-red-600 transition-colors text-zinc-950 placeholder:text-zinc-300"
                                         required
@@ -229,6 +267,9 @@ export default function RaiseTicketPage() {
                                     {status === "loading" ? "Processing..." : "Submit request"}
                                     <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
+                                {status === "error" && (
+                                    <p className="text-red-500 text-sm font-medium text-center">There was an error submitting your request. Please ensure all inputs are valid (e.g. valid Client ID formatting) and try again.</p>
+                                )}
                             </form>
                         </motion.div>
                     )}

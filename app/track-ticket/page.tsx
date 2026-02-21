@@ -15,25 +15,28 @@ export default function TrackTicketPage() {
         if (!ticketId.trim()) return;
 
         setStatus("loading");
-        // Simulated API Delay
-        setTimeout(() => {
-            // For demo: if ID is RLX-DEMO, show success
-            if (ticketId.toUpperCase().includes("RLX")) {
-                setTicketData({
-                    ticketId: ticketId.toUpperCase(),
-                    status: "IN_PROGRESS",
-                    name: "Digital Transformation Project",
-                    clientId: "CID-8821",
-                    pageUrl: "https://redlix.co.in/dashboard",
-                    description: "Refactor the authentication flow and add biometric support.",
-                    authorizedPerson: "Rishi Rohan",
-                    createdAt: new Date().toISOString()
-                });
-                setStatus("success");
-            } else {
+        setTicketData(null);
+
+        try {
+            const res = await fetch(`/api/track-ticket?ticketId=${encodeURIComponent(ticketId.trim())}`);
+
+            if (res.status === 404) {
                 setStatus("not_found");
+                return;
             }
-        }, 1200);
+
+            if (!res.ok) {
+                setStatus("error");
+                return;
+            }
+
+            const data = await res.json();
+            setTicketData(data.ticket);
+            setStatus("success");
+        } catch (error) {
+            console.error("Track Ticket error:", error);
+            setStatus("error");
+        }
     };
 
     const getStatusInfo = (ticketStatus: string) => {
@@ -126,6 +129,11 @@ export default function TrackTicketPage() {
                         {status === "not_found" && (
                             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-500 text-sm font-medium mb-8">
                                 Ticket not found. Please verify the ID and try again.
+                            </motion.p>
+                        )}
+                        {status === "error" && (
+                            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-500 text-sm font-medium mb-8">
+                                Encountered an error verifying your system ID. Please check formatting and try again.
                             </motion.p>
                         )}
 

@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Career {
+  id              String   @id @default(uuid())
+  title           String
+  slug            String   @unique
+  location        String
+  jobType         String
+  experience      String
+  salary          String?
+  companyName     String?
+  companyLogo     String?
+  description     String
+  requirements    String
+  responsibilities String
+  status          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  applications    CareerApplication[]
+}
+
+model CareerApplication {
+  id         String   @id @default(uuid())
+  careerId   String
+  fullName   String
+  email      String
+  phone      String
+  resumeUrl  String
+  createdAt  DateTime @default(now())
+
+  career     Career   @relation(fields: [careerId], references: [id], onDelete: Cascade)
+}
+
+model MaintenanceRequest {
+  id          String   @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String
+  clientId    String?
+  requestType String
+  status      String   @default("PENDING") // PENDING, IN_PROGRESS, RESOLVED
+  createdAt   DateTime @default(now())
+}
+
+model Newsletter {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model SupportTicket {
+  id               String   @id @default(uuid())
+  ticketId         String   @unique
+  name             String
+  clientId         String
+  pageUrl          String
+  description      String
+  authorizedPerson String
+  status           String   @default("OPEN")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

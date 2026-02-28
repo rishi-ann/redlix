@@ -25,9 +25,9 @@ const projects = [
         author: {
             name: "HSGA Telangana",
             role: "Government Infrastructure",
-            avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1772261857/Screenshot_2026-02-28_at_12.26.36_m4yim2.png"
+            avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1770199908/1769454781522_pgepvr.png"
         },
-        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771183548/Screenshot_2026-02-16_at_00.55.41_we9z2s.png",
+        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1772261857/Screenshot_2026-02-28_at_12.26.36_m4yim2.png",
         studioName: "Redlix",
         link: "/hsga-landing"
     },
@@ -51,9 +51,9 @@ const projects = [
         author: {
             name: "HSGA Telangana",
             role: "Government Infrastructure",
-            avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1772261848/Screenshot_2026-02-28_at_12.26.53_yqcdpx.png"
+            avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1770199908/1769454781522_pgepvr.png"
         },
-        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771184011/Screenshot_2026-02-16_at_01.03.23_dldnmd.png",
+        image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1772261848/Screenshot_2026-02-28_at_12.26.53_yqcdpx.png",
         studioName: "Redlix",
         link: "/hus-system"
     }

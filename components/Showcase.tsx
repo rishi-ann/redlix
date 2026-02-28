@@ -25,7 +25,7 @@ const projects = [
         author: {
             name: "HSGA Telangana",
             role: "Government Infrastructure",
-            avatar: "https://res.cloudinary.com/dq2suftps/image/upload/v1722516854/logo_bivaq2.jpg"
+            avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1772261857/Screenshot_2026-02-28_at_12.26.36_m4yim2.png"
         },
         image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771183548/Screenshot_2026-02-16_at_00.55.41_we9z2s.png",
         studioName: "Redlix",
@@ -51,7 +51,7 @@ const projects = [
         author: {
             name: "HSGA Telangana",
             role: "Government Infrastructure",
-            avatar: "https://res.cloudinary.com/dq2suftps/image/upload/v1722516854/logo_bivaq2.jpg"
+            avatar: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1772261848/Screenshot_2026-02-28_at_12.26.53_yqcdpx.png"
         },
         image: "https://res.cloudinary.com/dsqqrpzfl/image/upload/v1771184011/Screenshot_2026-02-16_at_01.03.23_dldnmd.png",
         studioName: "Redlix",
